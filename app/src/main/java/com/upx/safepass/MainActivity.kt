@@ -9,7 +9,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.upx.safepass.presentation.login.LoginScreen
+import com.upx.safepass.presentation.login.LoginViewModel
+import com.upx.safepass.presentation.passwordList.PasswordListScreen
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
