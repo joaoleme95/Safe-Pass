@@ -13,22 +13,31 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.upx.safepass.presentation.addPassword.AddPasswordDialog
 
 @Composable
-fun PasswordListScreen(viewModel: PasswordViewModel = viewModel()) {
+fun PasswordListScreen(viewModel: PasswordViewModel) {
     var showDialog by remember { mutableStateOf(false) }
-    val password by viewModel.passwords.collectAsState()
+    val passwords by viewModel.passwords.collectAsState()
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { showDialog = true }) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
+                Icon(Icons.Default.Add, contentDescription = "Adicionar senha")
             }
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding).padding(16.dp)) {
-            LazyColumn {
-                items(password) { password ->
-                    Text("${password.title}: ${password.password}", style = MaterialTheme.typography.bodyLarge)
-                    Spacer(modifier = Modifier.height(8.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp)
+        ) {
+            if (passwords.isEmpty()) {
+                Text("Nenhuma senha salva.", style = MaterialTheme.typography.bodyLarge)
+            } else {
+                LazyColumn {
+                    items(passwords) { password ->
+                        Text("${password.title}: ${password.password}", style = MaterialTheme.typography.bodyLarge)
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
         }

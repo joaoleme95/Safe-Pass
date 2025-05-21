@@ -27,28 +27,36 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         OutlinedTextField(
             value = viewModel.password.value,
             onValueChange = { viewModel.password.value = it },
-            label = { Text("Digite sua senha") },
-            visualTransformation = PasswordVisualTransformation()
+            label = {
+                if (viewModel.isFirstAccess.value) {
+                    Text("Defina sua nova senha")
+                } else {
+                    Text("Digite sua senha")
+                }
+            },
+            visualTransformation = PasswordVisualTransformation(),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            if (viewModel.isPasswordCorrect()) {
-                navController.navigate("passwords")
-            } else {
-                viewModel.errorMessage.value = "Senha incorreta."
+            viewModel.checkPassword {
+                navController.navigate("passwords") {
+                    popUpTo("login") { inclusive = true }
+                }
             }
         }) {
-            Text("Entrar")
+            Text(text = if (viewModel.isFirstAccess.value) "Salvar senha" else "Entrar")
         }
 
         if (viewModel.errorMessage.value.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
-            Text(viewModel.errorMessage.value, color = MaterialTheme.colorScheme.error)
+            Text(text = viewModel.errorMessage.value, color = MaterialTheme.colorScheme.error)
         }
     }
 }
